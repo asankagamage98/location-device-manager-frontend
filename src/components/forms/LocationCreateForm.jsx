@@ -18,13 +18,13 @@ export default function LocationCreateForm() {
     axios
       .post("http://localhost:3001/api/location", form)
       .then((res) => {
-        console.log(res.data);
         alert("successfully submit data..!");
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  
   return (
     <form className="flex max-w-md flex-col gap-4" onSubmit={submit}>
       <div className="font-bold text-2xl">

@@ -7,10 +7,84 @@ import {
   Select,
   TextInput,
 } from "flowbite-react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function DeviceCreateForm() {
+  const [form, setForm] = useState({
+    serialNumber: "",
+    type: "",
+    image: "",
+    locationId: "",
+    status: "active",
+  });
+
+  const [locations, setLocations] = useState([]);
+  const [image, setImage] = useState("");
+
+  const fetchAllLocations = () => {
+    axios
+      .get("http://localhost:3001/api/location")
+      .then((response) => {
+        setLocations(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const Submit = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:3001/api/device", form)
+      .then((response) => {
+        console.log(response);
+        alert("successfully submited data ...!");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error);
+      });
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // Convert image file to Base64 string
+  const convertToBase64 = (e) => {
+    const file = e.target.files[0];
+    const maxSize = 15 * 1024 * 1024; // 15MB in bytes
+    const acceptedImageTypes = ["image/jpeg", "image/png"];
+
+    if (file && file.size <= maxSize) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const fileType = file.type;
+        if (acceptedImageTypes.includes(fileType)) {
+          setForm({ ...form, image: reader.result });
+          setImage(reader.result);
+        } else {
+          alert("Please select an image file (JPEG, PNG) only.");
+          e.target.value = null;
+        }
+      };
+      reader.onerror = (error) => {
+        console.log("Error: ", error);
+      };
+    } else {
+      alert("Please select a file below 15MB.");
+      e.target.value = null;
+    }
+  };
+
+  useEffect(() => {
+    fetchAllLocations();
+  }, []);
+
   return (
-    <form className="flex max-w-md flex-col gap-4">
+    <form className="flex max-w-md flex-col gap-4" onSubmit={Submit}>
       <div className="font-bold text-2xl">
         <p className="">Add a new device</p>
       </div>
@@ -18,10 +92,22 @@ export default function DeviceCreateForm() {
         <div className="mb-2 block">
           <Label htmlFor="type" value="Select Device Type" />
         </div>
-        <Select id="type" required>
-          <option>pos</option>
-          <option>kisok</option>
-          <option>signage</option>
+        <Select
+          className="capitalize"
+          id="type"
+          name="type"
+          onChange={handleChange}
+          required
+        >
+          <option className="capitalize" value={"pos"}>
+            pos
+          </option>
+          <option className="capitalize" value={"kiosk"}>
+            kiosk
+          </option>
+          <option className="capitalize" value={"signage"}>
+            signage
+          </option>
         </Select>
       </div>
       <div>
@@ -31,7 +117,9 @@ export default function DeviceCreateForm() {
         <TextInput
           id="sno"
           type="text"
+          name="serialNumber"
           placeholder="input Serial number"
+          onChange={handleChange}
           required
         />
       </div>
@@ -40,10 +128,18 @@ export default function DeviceCreateForm() {
         <div className="mb-2 block">
           <Label htmlFor="location" value="Select Location" />
         </div>
-        <Select id="location" required>
-          <option>pos</option>
-          <option>kisok</option>
-          <option>signage</option>
+        <Select
+          className="capitalize"
+          id="location"
+          name="locationId"
+          onChange={handleChange}
+          required
+        >
+          {locations?.map((value, index) => (
+            <option className="capitalize" key={index} value={value?._id}>
+              {value?.name}
+            </option>
+          ))}
         </Select>
       </div>
       <div className="flex w-full items-center justify-center">
@@ -72,21 +168,42 @@ export default function DeviceCreateForm() {
               drop
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              SVG, PNG, JPG or GIF (MAX. 800x400px)
+              SVG, PNG, JPG
             </p>
+            {image == "" || image == null ? (
+              ""
+            ) : (
+              <img src={image} width={100} height={100} />
+            )}
           </div>
-          <FileInput id="dropzone-file" className="hidden" />
+          <FileInput
+            id="dropzone-file"
+            className="hidden"
+            name="image"
+            onChange={convertToBase64}
+          />
         </Label>
       </div>
 
       <fieldset className="flex max-w-md flex-row gap-4">
         <legend className="mb-4">Status</legend>
         <div className="flex items-center gap-2">
-          <Radio id="active" name="status" value="active" defaultChecked />
+          <Radio
+            id="active"
+            name="status"
+            value="active"
+            defaultChecked
+            onChange={handleChange}
+          />
           <Label htmlFor="active">Active</Label>
         </div>
         <div className="flex items-center gap-2">
-          <Radio id="inactive" name="status" value="inactive" />
+          <Radio
+            id="inactive"
+            name="status"
+            value="inactive"
+            onChange={handleChange}
+          />
           <Label htmlFor="inactive">Inactive</Label>
         </div>
       </fieldset>
