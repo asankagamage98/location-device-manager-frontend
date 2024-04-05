@@ -10,14 +10,15 @@ export default function HomeFilterForm({locations}) {
    
   return (
     <>
-    <form className="flex flex-row space-x-4 " action="">
-        <div>
+    <form className="flex flex-row space-x-4 flex-wrap" action="">
+        <div className='w-[200px]'>
           <Select
             className="capitalize"
             id="location"
             name="locationId"
             required
           >
+             <option disabled value="">Select location</option>
             {locations?.map((value, index) => (
               <option className="capitalize" key={index} value={value?._id}>
                 {value?.name}
@@ -26,8 +27,9 @@ export default function HomeFilterForm({locations}) {
           </Select>
         </div>
 
-        <div className="max-w-lg">
+        <div className="w-[200px]">
           <Select className="capitalize" id="type" name="type" required>
+            <option disabled value="">Select device type</option>
             <option className="capitalize" value={"pos"}>
               pos
             </option>

@@ -1,11 +1,12 @@
-import axios from "axios";
+
 import { Card, Label } from "flowbite-react";
 import React, { useState, useEffect } from "react";
 import { Badge } from "flowbite-react";
+import DeviceModal from "../modal/DeviceModal";
 
-export default function DeviceCard({locations}) {
+export default function DeviceCard({locations,fetch}) {
   const [device, setDevice] = useState([]);
-
+  
   useEffect(() => {
      setDevice(locations);
     console.log(device);
@@ -23,7 +24,8 @@ export default function DeviceCard({locations}) {
               address: location.address,
               phone: location.phone,
             }}
-        
+            fetch={fetch}
+           
           />
         ))
       )}
@@ -31,7 +33,10 @@ export default function DeviceCard({locations}) {
   );
 }
 
-const SingleCard = ({ device, location }) => {
+const SingleCard = ({ device, location,fetch }) => {
+    const [openModal, setOpenModal] = useState(false);
+
+
   const getBadge = (status) =>
     status === "active" ? (
       <Badge className='w-[70px] justify-center' color="success">Active</Badge>
@@ -40,11 +45,13 @@ const SingleCard = ({ device, location }) => {
     );
 
   return (
+    <>
     <Card
       className="max-w-xs w-[250px] shadow-lg mb-5"
+      onClick={(e) => setOpenModal(true)}
     >
       <div>
-        <img src={device?.image} alt="" srcset="" className='w-[200px] h-[190px]' />
+        <img src={device?.image} alt=""  className='w-[200px] h-[190px]' />
       </div>
      <div>
         <h5 className="text-lg font-bold capitalize mb-2">{device?.type}</h5>
@@ -52,17 +59,31 @@ const SingleCard = ({ device, location }) => {
             <Label>
             <p>Serial No:</p>
             </Label>
-            <h5 className="m-0 p-0">{device?.serialNumber}</h5>
+            <p className="">{device?.serialNumber}</p>
         </div>
         <div className="flex flex-row space-x-2 mb-2">
             <Label>
             <p>Location:</p>
             </Label>
-            <h5 className=" capitalize">{location?.name}</h5>
+            <p className="capitalize">{location?.name}</p>
         </div>
 
         {device?.status && getBadge(device?.status)}
      </div>
+    
+     
     </Card>
+        {openModal && (
+                        <DeviceModal
+                            setOpenModal={setOpenModal}
+                            openModal={openModal}
+                            device={device}
+                            location={location}
+                            fetch={fetch}
+                            className=""
+                        />
+        )}
+    </>
+    
   );
 };
