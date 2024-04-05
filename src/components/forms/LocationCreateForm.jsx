@@ -24,7 +24,7 @@ export default function LocationCreateForm() {
         console.log(err);
       });
   };
-  
+
   return (
     <form className="flex max-w-md flex-col gap-4" onSubmit={submit}>
       <div className="font-bold text-2xl">
@@ -59,7 +59,7 @@ export default function LocationCreateForm() {
       </div>
       <div>
         <div className="mb-2 block">
-          <Label htmlFor="sno" value="Phone numbe" />
+          <Label htmlFor="sno" value="Phone number" />
         </div>
         <TextInput
           id="sno"
