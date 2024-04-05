@@ -23,11 +23,11 @@ export default function Home() {
 
   return (
     <div className="w-full  mx-auto p-3 ">
-      <div className="w-full mx-auto p-3 flex justify-center">
+      {/* <div className="w-full mx-auto p-3 flex justify-center">
         <HomeFilterForm locations={locations} />
-      </div>
+      </div> */}
 
-      <div className="flex flex-row space-x-4 mt-5 flex-wrap ">
+      <div className="flex flex-row space-x-4 mt-5 flex-wrap justify-center">
         <DeviceCard locations={locations} fetch={fetchAllLocations}/>
       </div>
     </div>

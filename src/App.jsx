@@ -9,6 +9,8 @@ import {
 } from 'react-router-dom';
 import DeviceCreate from './pages/DeviceCreate.jsx';
 import LocationCreate from './pages/LocationCreate.jsx';
+import DeviceEditForm from './components/forms/DeviceEditForm.jsx';
+import ExistingLocations from './pages/ExistingLocations.jsx';
 
 export default function App() {
   return (
@@ -18,6 +20,9 @@ export default function App() {
         <Route path="/" element={<Home/>} />
         <Route path="/device" element={<DeviceCreate/>} />
         <Route path="/location" element={<LocationCreate/>} />
+        <Route path="/editDevice/:id" element={<DeviceEditForm/>} />
+        <Route path="/viewLocations" element={<ExistingLocations/>} />
+        {/* <Route path="/editLocation/:id" element={<DeviceEditForm/>} /> */}
     </Routes>
     </div>
   )
