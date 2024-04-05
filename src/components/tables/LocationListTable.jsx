@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 import { Table } from "flowbite-react";
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 export default function LocationListTable() {
     const [location,setLocation] = useState([]);
@@ -49,6 +50,13 @@ useEffect(() => {
     fetchLocationData();
     console.log(location);
 }, [])
+
+const navigate = useNavigate();
+
+const onClickUpdate = (e,id) => {
+    navigate(`/editLocation/${id}`);
+}
+
   return (
     <>
     <div className="overflow-x-auto">
@@ -75,7 +83,7 @@ useEffect(() => {
             <Table.Cell>{location?.address}</Table.Cell>
             <Table.Cell>{location?.phone}</Table.Cell>
             <Table.Cell>
-                <a href="#" className="font-medium text-green-400 hover:underline">
+                <a href="#" onClick={e => onClickUpdate(e, location?._id)} className="font-medium text-green-400 hover:underline">
                 Edit
                 </a>
             </Table.Cell>
