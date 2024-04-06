@@ -9,7 +9,7 @@ import {
 } from "flowbite-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function DeviceEditForm() {
   const [form, setForm] = useState({
@@ -39,7 +39,7 @@ export default function DeviceEditForm() {
   };
 
   const { id } = useParams();
-
+  const navigate = useNavigate();
   //get device details by id
   const fetchSingleDevice = () => {
     axios
@@ -68,6 +68,7 @@ export default function DeviceEditForm() {
       .then((response) => {
         console.log(response);
         alert("successfully updated data ...!");
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);
@@ -243,7 +244,9 @@ export default function DeviceEditForm() {
           </div>
         </fieldset>
 
-        <Button type="submit">Update</Button>
+        <Button color="blue" type="submit">
+          Update
+        </Button>
       </form>
     </div>
   );

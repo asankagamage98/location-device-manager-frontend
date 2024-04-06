@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Label, TextInput } from "flowbite-react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function LocationEditForm() {
   const [form, setForm] = useState({
@@ -13,7 +14,7 @@ export default function LocationEditForm() {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
+  const navigate = useNavigate();
   const { id } = useParams();
 
   //import environment variables
@@ -33,14 +34,42 @@ export default function LocationEditForm() {
 
   const submit = (e) => {
     e.preventDefault();
-    axios
-      .put(`${LOCATION}${id}`, form)
-      .then((res) => {
-        alert("successfully updated data..!");
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      axios.put(`${LOCATION}${id}`, form);
+      // success toast
+      Swal.fire({
+        icon: "success",
+        title: "Location updated Successfully",
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        toast: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
       });
+      navigate("/viewLocations");
+    } catch (error) {
+      // error toast
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to update location. Please try again later.",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      console.error("Error updating location:", error.message);
+    }
   };
 
   useEffect(() => {
@@ -98,7 +127,9 @@ export default function LocationEditForm() {
             required
           />
         </div>
-        <Button type="submit">Update</Button>
+        <Button color="blue" type="submit">
+          Update
+        </Button>
       </form>
     </div>
   );

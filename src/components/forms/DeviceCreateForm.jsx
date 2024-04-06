@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 export default function DeviceCreateForm() {
   const [form, setForm] = useState({
@@ -27,9 +27,8 @@ export default function DeviceCreateForm() {
   const navigate = useNavigate();
 
   //import environment variables
-  const DEVICE = import.meta.env.VITE_DEVICE_API_URL
-  const LOCATION = import.meta.env.VITE_LOCATION_API_URL
-
+  const DEVICE = import.meta.env.VITE_DEVICE_API_URL;
+  const LOCATION = import.meta.env.VITE_LOCATION_API_URL;
 
   const fetchAllLocations = () => {
     axios
@@ -44,17 +43,42 @@ export default function DeviceCreateForm() {
 
   const Submit = (e) => {
     e.preventDefault();
-    axios
-      .post(`${DEVICE}`, form)
-      .then((response) => {
-        console.log(response);
-        alert("successfully submited data ...!");
-        navigate('/')
-      })
-      .catch((error) => {
-        console.log(error);
-        alert(error);
+    try {
+      axios.post(`${DEVICE}`, form);
+      // success toast
+      Swal.fire({
+        icon: "success",
+        title: "device created Successfully",
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+        toast: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
       });
+      navigate("/");
+    } catch (error) {
+      // error toast
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to create device. Please try again later.",
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+
+      console.error("Error creating device:", error.message);
+    }
   };
 
   const handleChange = (e) => {
@@ -217,7 +241,7 @@ export default function DeviceCreateForm() {
         </div>
       </fieldset>
 
-      <Button color="blue"  type="submit">
+      <Button color="blue" type="submit">
         Submit
       </Button>
     </form>
