@@ -10,6 +10,9 @@ export default function DeviceModal({
   location,
   fetch,
 }) {
+  //import environment variables
+  const DEVICE = import.meta.env.VITE_DEVICE_API_URL;
+
   // remove a note by id
   const remove = (e, id) => {
     // confirmation dialog
@@ -24,7 +27,7 @@ export default function DeviceModal({
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:3001/api/device/${id}`)
+          .delete(`${DEVICE}${id}`)
           .then(() => {
             // success
             Swal.fire({

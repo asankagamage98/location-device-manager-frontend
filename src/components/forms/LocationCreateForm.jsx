@@ -13,10 +13,13 @@ export default function LocationCreateForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  //import environment variables
+  const LOCATION = import.meta.env.VITE_LOCATION_API_URL;
+
   const submit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/api/location", form)
+      .post(`${LOCATION}`, form)
       .then((res) => {
         alert("successfully submit data..!");
       })

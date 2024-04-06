@@ -9,6 +9,8 @@ import {
 } from "flowbite-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 export default function DeviceCreateForm() {
   const [form, setForm] = useState({
@@ -22,9 +24,16 @@ export default function DeviceCreateForm() {
   const [locations, setLocations] = useState([]);
   const [image, setImage] = useState("");
 
+  const navigate = useNavigate();
+
+  //import environment variables
+  const DEVICE = import.meta.env.VITE_DEVICE_API_URL
+  const LOCATION = import.meta.env.VITE_LOCATION_API_URL
+
+
   const fetchAllLocations = () => {
     axios
-      .get("http://localhost:3001/api/location")
+      .get(`${LOCATION}`)
       .then((response) => {
         setLocations(response.data);
       })
@@ -36,10 +45,11 @@ export default function DeviceCreateForm() {
   const Submit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/api/device", form)
+      .post(`${DEVICE}`, form)
       .then((response) => {
         console.log(response);
         alert("successfully submited data ...!");
+        navigate('/')
       })
       .catch((error) => {
         console.log(error);
@@ -192,7 +202,6 @@ export default function DeviceCreateForm() {
             id="active"
             name="status"
             value="active"
-            defaultChecked
             onChange={handleChange}
           />
           <Label htmlFor="active">Active</Label>
@@ -208,7 +217,9 @@ export default function DeviceCreateForm() {
         </div>
       </fieldset>
 
-      <Button type="submit">Submit</Button>
+      <Button color="blue"  type="submit">
+        Submit
+      </Button>
     </form>
   );
 }

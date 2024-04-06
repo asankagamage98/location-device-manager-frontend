@@ -23,9 +23,13 @@ export default function DeviceEditForm() {
   const [locations, setLocations] = useState([]);
   const [image, setImage] = useState("");
 
-  const fetchAllLocations =  () => {
-     axios
-      .get("http://localhost:3001/api/location")
+  //import environment variables
+  const DEVICE = import.meta.env.VITE_DEVICE_API_URL;
+  const LOCATION = import.meta.env.VITE_LOCATION_API_URL;
+
+  const fetchAllLocations = () => {
+    axios
+      .get(`${LOCATION}`)
       .then((response) => {
         setLocations(response.data);
       })
@@ -37,11 +41,11 @@ export default function DeviceEditForm() {
   const { id } = useParams();
 
   //get device details by id
-  const fetchSingleDevice =  () => {
+  const fetchSingleDevice = () => {
     axios
-      .get(`http://localhost:3001/api/device/${id}`)
+      .get(`${DEVICE}${id}`)
       .then((response) => {
-        let {device, location} = response.data;
+        let { device, location } = response.data;
         setForm({
           serialNumber: device?.serialNumber,
           type: device?.type,
@@ -60,7 +64,7 @@ export default function DeviceEditForm() {
   const Submit = (e) => {
     e.preventDefault();
     axios
-      .put(`http://localhost:3001/api/device/${id}`, form)
+      .put(`${DEVICE}${id}`, form)
       .then((response) => {
         console.log(response);
         alert("successfully updated data ...!");
@@ -106,7 +110,6 @@ export default function DeviceEditForm() {
   useEffect(() => {
     fetchAllLocations();
     fetchSingleDevice();
-  
   }, []);
 
   return (
@@ -210,7 +213,7 @@ export default function DeviceEditForm() {
               id="dropzone-file"
               className="hidden"
               name="image"
-            //   value={form?.image || null}
+              //   value={form?.image || null}
               onChange={convertToBase64}
             />
           </Label>
