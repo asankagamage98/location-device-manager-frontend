@@ -11,13 +11,16 @@ export default function LocationCreateForm() {
     address: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   //import environment variables
   const LOCATION = import.meta.env.VITE_LOCATION_API_URL;
-  const navigate = useNavigate();
+
+  //submit location
   const submit = (e) => {
     e.preventDefault();
     try {
@@ -71,7 +74,7 @@ export default function LocationCreateForm() {
         <TextInput
           id="sno"
           type="text"
-          placeholder="input human readable namer"
+          placeholder="Input human readable namer"
           name="name"
           onChange={handleChange}
           required
@@ -84,7 +87,7 @@ export default function LocationCreateForm() {
         <TextInput
           id="sno"
           type="text"
-          placeholder="input Address"
+          placeholder="Input Address"
           name="address"
           onChange={handleChange}
           required
@@ -97,7 +100,7 @@ export default function LocationCreateForm() {
         <TextInput
           id="sno"
           type="number"
-          placeholder="input phone number"
+          placeholder="Input phone number(0-9)"
           name="phone"
           onChange={handleChange}
           pattern="[0-9]*"

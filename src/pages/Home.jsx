@@ -23,10 +23,7 @@ export default function Home() {
 
   return (
     <div className="w-full  mx-auto p-3 ">
-      {/* <div className="w-full mx-auto p-3 flex justify-center">
-        <HomeFilterForm locations={locations} />
-      </div> */}
-
+      <p className='text-left font-bold text-gray-600 text-2xl m-5'>List Of Devices</p>
       <div className="flex flex-row space-x-4 mt-5 flex-wrap justify-center">
         <DeviceCard locations={locations} fetch={fetchAllLocations}/>
       </div>

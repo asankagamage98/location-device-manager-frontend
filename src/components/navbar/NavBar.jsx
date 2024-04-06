@@ -8,8 +8,8 @@ export default function NavBar() {
     <Navbar fluid rounded>
       <Navbar.Brand as={Link} href="">
         {/* <img src="/favicon.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" /> */}
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          Device Manager
+        <span className="self-center whitespace-nowrap text-xl font-bold text-blue-700">
+          My Device Manager
         </span>
       </Navbar.Brand>
       <Navbar.Toggle />

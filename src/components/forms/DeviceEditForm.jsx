@@ -1,4 +1,3 @@
-// only import what you want to use
 import {
   Button,
   FileInput,
@@ -23,10 +22,16 @@ export default function DeviceEditForm() {
   const [locations, setLocations] = useState([]);
   const [image, setImage] = useState("");
 
-  //import environment variables
+  // import environment variables
   const DEVICE = import.meta.env.VITE_DEVICE_API_URL;
   const LOCATION = import.meta.env.VITE_LOCATION_API_URL;
 
+  // Get the device ID from the URL params
+  const { id } = useParams();
+  // initialize navigate
+  const navigate = useNavigate();
+
+  // fetch all locations
   const fetchAllLocations = () => {
     axios
       .get(`${LOCATION}`)
@@ -38,8 +43,6 @@ export default function DeviceEditForm() {
       });
   };
 
-  const { id } = useParams();
-  const navigate = useNavigate();
   //get device details by id
   const fetchSingleDevice = () => {
     axios
@@ -80,7 +83,7 @@ export default function DeviceEditForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Convert image file to Base64 string
+  // Convert image file to  string
   const convertToBase64 = (e) => {
     const file = e.target.files[0];
     const maxSize = 15 * 1024 * 1024; // 15MB in bytes
@@ -108,6 +111,7 @@ export default function DeviceEditForm() {
     }
   };
 
+  // fetch locations and device details
   useEffect(() => {
     fetchAllLocations();
     fetchSingleDevice();
@@ -131,6 +135,9 @@ export default function DeviceEditForm() {
             value={form?.type}
             required
           >
+            <option value="" disabled selected hidden>
+              Choose Device Type
+            </option>
             <option className="capitalize" value={"pos"}>
               pos
             </option>
@@ -151,7 +158,7 @@ export default function DeviceEditForm() {
             type="text"
             name="serialNumber"
             value={form?.serialNumber}
-            placeholder="input Serial number"
+            placeholder="Input Serial number"
             onChange={handleChange}
             required
           />
@@ -169,6 +176,9 @@ export default function DeviceEditForm() {
             onChange={handleChange}
             required
           >
+            <option value="" disabled selected hidden>
+              Choose Location
+            </option>
             {locations?.map((value, index) => (
               <option className="capitalize" key={index} value={value?._id}>
                 {value?.name}

@@ -1,4 +1,3 @@
-// only import what you want to use
 import {
   Button,
   FileInput,
@@ -30,6 +29,7 @@ export default function DeviceCreateForm() {
   const DEVICE = import.meta.env.VITE_DEVICE_API_URL;
   const LOCATION = import.meta.env.VITE_LOCATION_API_URL;
 
+  // get all locations
   const fetchAllLocations = () => {
     axios
       .get(`${LOCATION}`)
@@ -41,6 +41,7 @@ export default function DeviceCreateForm() {
       });
   };
 
+  // submit new device details
   const Submit = (e) => {
     e.preventDefault();
     try {
@@ -85,7 +86,7 @@ export default function DeviceCreateForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Convert image file to Base64 string
+  // Convert image file to string
   const convertToBase64 = (e) => {
     const file = e.target.files[0];
     const maxSize = 15 * 1024 * 1024; // 15MB in bytes
@@ -133,6 +134,9 @@ export default function DeviceCreateForm() {
           onChange={handleChange}
           required
         >
+          <option value="" disabled selected hidden>
+            Choose Device Type
+          </option>
           <option className="capitalize" value={"pos"}>
             pos
           </option>
@@ -152,7 +156,7 @@ export default function DeviceCreateForm() {
           id="sno"
           type="text"
           name="serialNumber"
-          placeholder="input Serial number"
+          placeholder="Input Serial number"
           onChange={handleChange}
           required
         />
@@ -169,6 +173,9 @@ export default function DeviceCreateForm() {
           onChange={handleChange}
           required
         >
+          <option value="" disabled selected hidden>
+            Choose Location
+          </option>
           {locations?.map((value, index) => (
             <option className="capitalize" key={index} value={value?._id}>
               {value?.name}

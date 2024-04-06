@@ -12,6 +12,7 @@ export default function DeviceModal({
 }) {
   //import environment variables
   const DEVICE = import.meta.env.VITE_DEVICE_API_URL;
+  const navigate = useNavigate();
 
   // remove a note by id
   const remove = (e, id) => {
@@ -45,8 +46,6 @@ export default function DeviceModal({
       }
     });
   };
-
-  const navigate = useNavigate();
 
   // navigate to edit screen
   const onClickUpdate = (e, id) => {

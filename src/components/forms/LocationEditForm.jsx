@@ -11,15 +11,17 @@ export default function LocationEditForm() {
     address: "",
   });
 
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const navigate = useNavigate();
-  const { id } = useParams();
 
   //import environment variables
   const LOCATION = import.meta.env.VITE_LOCATION_API_URL;
 
+  // get single location by id
   const getSingleLoationData = () => {
     axios
       .get(`${LOCATION}${id}`)
@@ -32,6 +34,7 @@ export default function LocationEditForm() {
       });
   };
 
+  // submit update details
   const submit = (e) => {
     e.preventDefault();
     try {
